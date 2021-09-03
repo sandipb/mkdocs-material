@@ -1,0 +1,11 @@
+group:
+  mkdocs:
+    exists: true
+
+user:
+  mkdocs:
+    exists: true
+
+process:
+  mkdocs:
+    running: true

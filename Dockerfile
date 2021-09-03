@@ -26,6 +26,7 @@ ARG WITH_PLUGINS=true
 # Environment variables
 ENV PACKAGES=/usr/local/lib/python3.9/site-packages
 ENV PYTHONDONTWRITEBYTECODE=1
+ENV USER=mkdocs
 
 # Set build directory
 WORKDIR /tmp
@@ -66,13 +67,20 @@ RUN \
     find ${PACKAGES} \
       -type f \
       -path "*/__pycache__/*" \
-      -exec rm -f {} \;
+      -exec rm -f {} \; \
+  && addgroup "$USER" \
+  && adduser --disabled-password \
+             --gecos "" --home "$(pwd)" \
+             --ingroup "$USER" --no-create-home \
+             "$USER"
 
 # Set working directory
 WORKDIR /docs
 
 # Expose MkDocs development server port
 EXPOSE 8000
+
+USER $USER
 
 # Start development server by default
 ENTRYPOINT ["mkdocs"]
